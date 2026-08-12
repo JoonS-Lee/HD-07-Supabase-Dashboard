@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HD Project Lounge | 사내 프로젝트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#081a33;--navy2:#102a4c;--royal:#2457d6;--royal2:#4f7bff;--point:#45d6b2;--bg:#f5f7fb;--surface:#fff;--line:#e3e9f2;--text:#17243a;--muted:#72809a;--shadow:0 18px 45px rgba(8,26,51,.1)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:"Nanum Gothic","Malgun Gothic",sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(8,26,51,.95);backdrop-filter:blur(12px);color:#fff}
+.nav-inner{max-width:1400px;margin:auto;min-height:72px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:12px;font-weight:800}.brand-mark{width:40px;height:40px;border-radius:12px;background:var(--point);color:var(--navy);display:grid;place-items:center}.brand small{display:block;color:#aab6ca;font-size:10px;margin-top:2px}.nav-menu{display:flex;gap:4px}.nav-menu button{border:0;background:transparent;color:#dce5f2;padding:9px 11px;border-radius:10px;font-size:12px}.nav-menu button:hover,.nav-menu button.active{background:rgba(255,255,255,.09);color:#fff}.nav-actions{display:flex;gap:8px;align-items:center}.login-label{font-size:11px;color:#c9d5e6;max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero{position:relative;overflow:hidden;min-height:620px;color:#fff;background:radial-gradient(circle at 80% 20%,rgba(79,123,255,.28),transparent 28%),radial-gradient(circle at 15% 80%,rgba(69,214,178,.18),transparent 30%),linear-gradient(135deg,var(--navy),var(--navy2))}.hero canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.65}.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(#000,transparent)}.hero-inner{position:relative;z-index:1;max-width:1400px;margin:auto;min-height:620px;padding:85px 24px;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}.eyebrow{display:inline-flex;padding:7px 10px;border:1px solid rgba(69,214,178,.35);background:rgba(69,214,178,.08);border-radius:999px;color:var(--point);font-size:11px;font-weight:800}.hero h1{font-size:clamp(38px,5vw,70px);line-height:1.08;letter-spacing:-2.8px;margin:18px 0}.hero h1 span{color:var(--point)}.hero-copy{max-width:760px;color:#c6d1e2;font-size:16px}.hero-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.2s}.btn:hover{transform:translateY(-2px);box-shadow:0 9px 20px rgba(0,0,0,.15)}.btn-primary{background:var(--point);color:var(--navy)}.btn-royal{background:var(--royal);color:#fff}.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.14)}.btn-soft{background:#eef3ff;color:var(--royal)}
+.hero-side{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.18);backdrop-filter:blur(10px);animation:float 5s ease-in-out infinite}.hero-side h3{margin:0 0 6px}.hero-side p{margin:0;color:#bdcbe0;font-size:13px}.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}.metric{padding:15px;border-radius:15px;background:rgba(255,255,255,.06)}.metric b{display:block;font-size:24px}.metric span{font-size:10px;color:#afc0d7}@keyframes float{50%{transform:translateY(-8px)}}
+.container{max-width:1400px;margin:auto;padding:28px 24px 60px}.section{margin:28px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:14px}.section-head h2{margin:0;color:var(--navy);font-size:23px;letter-spacing:-.7px}.section-head p{margin:3px 0 0;color:var(--muted);font-size:12px}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.quick-card,.panel,.auth-panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:0 8px 26px rgba(8,26,51,.05)}.quick-card{padding:20px;transition:.2s}.quick-card:hover{transform:translateY(-3px);border-color:#c8d7f8}.quick-icon{width:44px;height:44px;border-radius:13px;background:#eef3ff;color:var(--royal);display:grid;place-items:center;font-size:10px;font-weight:800}.quick-card h3{font-size:16px;margin:14px 0 5px;color:var(--navy)}.quick-card p{font-size:12px;color:var(--muted);margin:0 0 15px}
+.dash{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}.panel{padding:20px}.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:15px}.tabs button{padding:8px 11px;border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:10px;font-size:12px;font-weight:700}.tabs button.active{background:var(--navy);border-color:var(--navy);color:#fff}.post-list{display:grid;gap:8px}.post{border:1px solid var(--line);border-radius:13px;padding:13px;display:grid;grid-template-columns:58px 1fr auto;gap:12px;align-items:center;background:#fff;text-align:left;width:100%}.post:hover{border-color:#c7d5f3;background:#fbfcff}.post-type{font-size:10px;color:var(--royal);font-weight:800}.post-title{font-size:13px;font-weight:800;color:var(--navy)}.post-meta,.post-date{font-size:10px;color:var(--muted);margin-top:3px}.empty,.loading{padding:28px;text-align:center;color:var(--muted);font-size:12px}.stats{display:grid;gap:10px}.stat{display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:14px;background:#f7f9fd}.stat span{font-size:11px;color:var(--muted)}.stat b{font-size:20px;color:var(--navy)}
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.gallery-card{min-height:190px;border-radius:16px;overflow:hidden;position:relative;background:linear-gradient(135deg,#102a4c,#2457d6);color:#fff;border:1px solid #1c467c;background-size:cover;background-position:center}.gallery-card:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(69,214,178,.25);right:-60px;top:-50px;filter:blur(10px)}.gallery-card .gcontent{position:absolute;z-index:1;left:15px;right:15px;bottom:14px}.gallery-card small{color:#c3d2eb;font-size:10px}.gallery-card strong{display:block;font-size:14px;margin-top:2px}
+.join{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.join-box{background:linear-gradient(135deg,#0b2344,#153661);color:#fff;border-radius:24px;padding:28px;position:relative;overflow:hidden}.join-box h3{font-size:24px;margin:0 0 8px}.join-box p{color:#c8d5e8;font-size:13px}.steps{display:grid;gap:9px}.step{display:flex;gap:10px;padding:11px 0;border-top:1px solid rgba(255,255,255,.08)}.step b{width:24px;height:24px;border-radius:50%;background:var(--point);color:var(--navy);display:grid;place-items:center;flex:0 0 auto;font-size:11px}.step span{font-size:12px;color:#d9e3f0}.auth-panel{padding:24px}.auth-panel h3{margin:0 0 5px;color:var(--navy)}.auth-panel>p{font-size:11px;color:var(--muted);margin:0 0 15px}.form{display:grid;gap:9px}.input{width:100%;padding:12px 13px;border-radius:10px;border:1px solid var(--line);outline:none;background:#fbfcfe}.input:focus{border-color:#9db6f7;box-shadow:0 0 0 3px rgba(36,87,214,.08)}.auth-switch{text-align:center;font-size:11px;color:var(--muted);margin-top:10px}.auth-switch button{border:0;background:none;color:var(--royal);font-weight:800}
+.modal-backdrop{position:fixed;inset:0;background:rgba(3,11,23,.62);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}.modal-backdrop.show{display:flex}.modal{width:min(650px,100%);background:#fff;border-radius:20px;padding:23px;box-shadow:0 30px 90px rgba(0,0,0,.25)}.modal-head{display:flex;justify-content:space-between;gap:15px}.modal h3{margin:0;color:var(--navy)}.icon{border:0;background:#f3f6fa;border-radius:9px;width:34px;height:34px}.detail-meta{font-size:10px;color:var(--muted);margin:5px 0 15px}.detail-body{font-size:13px;white-space:pre-wrap;color:#334158}.toast{position:fixed;right:20px;bottom:20px;z-index:60;background:var(--navy);color:#fff;padding:12px 15px;border-radius:10px;transform:translateY(80px);opacity:0;transition:.3s}.toast.show{transform:translateY(0);opacity:1}
+footer{padding-top:30px;text-align:center;color:var(--muted);font-size:11px}
+@media(max-width:1050px){.nav-menu{display:none}.hero-inner,.dash,.join{grid-template-columns:1fr}.quick-grid,.gallery{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.nav-inner,.container{padding-left:14px;padding-right:14px}.hero-inner{padding:60px 14px 80px}.quick-grid,.gallery{grid-template-columns:1fr}.post{grid-template-columns:1fr}.login-label{display:none}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="nav-inner">
+    <a class="brand" href="#home"><span class="brand-mark">HD</span><span>HD PROJECT LOUNGE<small>홍보실 사내 프로젝트</small></span></a>
+    <nav class="nav-menu">
+      <button class="nav-link active" data-go="home">홈</button>
+      <button class="nav-link" data-board="notice">공지사항</button>
+      <button class="nav-link" data-board="webzine">자유게시판</button>
+      <button class="nav-link" data-board="archive">자료실</button>
+      <button class="nav-link" data-board="gallery">갤러리</button>
+      <button class="nav-link" data-go="join">참여안내</button>
+    </nav>
+    <div class="nav-actions"><span id="userLabel" class="login-label">로그인 필요</span><button id="navAuth" class="btn btn-primary">회원가입</button></div>
+  </div>
+</header>
+
+<section id="home" class="hero">
+  <canvas id="heroCanvas"></canvas><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <span class="eyebrow">INTERNAL PROJECT · PROMOTION TEAM</span>
+      <h1>함께 만들고,<br><span>함께 공유하는</span> 프로젝트 공간</h1>
+      <p class="hero-copy">홍보실에서 운영하는 사내 프로젝트의 공지, 아이디어, 자료, 현장 모습을 한곳에서 공유합니다. 간단한 회원가입 후 프로젝트에 참여하고 필요한 정보를 빠르게 확인하세요.</p>
+      <div class="hero-cta"><button class="btn btn-primary" data-go="join">프로젝트 참여하기</button><button class="btn btn-ghost" data-board="notice">게시판 둘러보기</button></div>
+    </div>
+    <aside class="hero-side">
+      <h3>PROJECT LOUNGE</h3><p>사내 프로젝트 참여자를 위한 4개 커뮤니케이션 채널</p>
+      <div class="metrics">
+        <div class="metric"><b id="metricMembers">0</b><span>가입 회원</span></div>
+        <div class="metric"><b id="metricPosts">0</b><span>전체 게시물</span></div>
+        <div class="metric"><b>04</b><span>게시판 타입</span></div>
+        <div class="metric"><b>24H</b><span>공유 공간</span></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<main class="container">
+  <section class="section">
+    <div class="section-head"><div><h2>PROJECT CHANNELS</h2><p>목적에 맞는 공간에서 프로젝트 자료와 소식을 공유합니다.</p></div></div>
+    <div class="quick-grid">
+      <article class="quick-card"><div class="quick-icon">NOTICE</div><h3>공지사항</h3><p>프로젝트 일정, 주요 결정사항, 운영 안내를 확인합니다.</p><button class="btn btn-soft" data-board="notice">공지사항 보기</button></article>
+      <article class="quick-card"><div class="quick-icon">WEBZINE</div><h3>자유게시판</h3><p>웹진처럼 읽고 공유하는 자유로운 아이디어와 프로젝트 이야기입니다.</p><button class="btn btn-soft" data-board="webzine">자유게시판 보기</button></article>
+      <article class="quick-card"><div class="quick-icon">FILES</div><h3>자료실</h3><p>기획서, 문서, 이미지 등 프로젝트 자료를 모아둡니다.</p><button class="btn btn-soft" data-board="archive">자료실 보기</button></article>
+      <article class="quick-card"><div class="quick-icon">PHOTO</div><h3>갤러리</h3><p>회의, 행사, 현장 활동 등 프로젝트의 모습을 기록합니다.</p><button class="btn btn-soft" data-board="gallery">갤러리 보기</button></article>
+    </div>
+  </section>
+
+  <section class="section" id="boardSection">
+    <div class="section-head"><div><h2 id="boardTitle">공지사항</h2><p id="boardDesc">프로젝트 일정, 결정사항, 운영 안내</p></div></div>
+    <div class="dash">
+      <section class="panel">
+        <div class="tabs">
+          <button class="tab active" data-board="notice">공지사항</button>
+          <button class="tab" data-board="webzine">자유게시판</button>
+          <button class="tab" data-board="archive">자료실</button>
+          <button class="tab" data-board="gallery">갤러리</button>
+        </div>
+        <div id="postList" class="post-list"><div class="loading">Supabase에서 불러오는 중...</div></div>
+      </section>
+      <aside class="panel"><div class="section-head"><div><h2 style="font-size:18px">PROJECT STATUS</h2><p>실시간 운영 현황</p></div></div>
+        <div class="stats">
+          <div class="stat"><span>공지사항</span><b id="countNotice">0</b></div>
+          <div class="stat"><span>자유게시판</span><b id="countWebzine">0</b></div>
+          <div class="stat"><span>자료실</span><b id="countArchive">0</b></div>
+          <div class="stat"><span>갤러리</span><b id="countGallery">0</b></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" id="gallerySection">
+    <div class="section-head"><div><h2>PROJECT GALLERY</h2><p>프로젝트 현장과 활동을 카드형 갤러리로 보여줍니다.</p></div><button class="btn btn-soft" data-board="gallery">전체 보기</button></div>
+    <div id="galleryGrid" class="gallery"></div>
+  </section>
+
+  <section class="section" id="join">
+    <div class="section-head"><div><h2>PROJECT PARTICIPATION</h2><p>직원이 프로젝트에 참여하는 방법</p></div></div>
+    <div class="join">
+      <section class="join-box"><h3>간단하게 가입하고<br>프로젝트에 참여하세요.</h3><p>회원가입 후 공지사항을 확인하고 자유게시판에서 의견을 남기거나 자료실을 이용할 수 있습니다.</p>
+        <div class="steps">
+          <div class="step"><b>1</b><span>회사 이메일로 회원가입합니다.</span></div>
+          <div class="step"><b>2</b><span>이메일 인증 안내를 확인합니다.</span></div>
+          <div class="step"><b>3</b><span>로그인 후 공지사항에서 운영 정보를 확인합니다.</span></div>
+          <div class="step"><b>4</b><span>자유게시판·자료실·갤러리를 활용해 프로젝트에 참여합니다.</span></div>
+        </div>
+      </section>
+      <section class="auth-panel">
+        <h3 id="authTitle">프로젝트 회원가입</h3><p id="authDesc">회사 이메일과 비밀번호만으로 간결하게 시작합니다.</p>
+        <form id="authForm" class="form">
+          <input id="authEmail" class="input" type="email" placeholder="회사 이메일" required>
+          <input id="authPassword" class="input" type="password" placeholder="비밀번호 (6자 이상)" minlength="6" required>
+          <input id="authPassword2" class="input" type="password" placeholder="비밀번호 확인" minlength="6">
+          <button id="authSubmit" class="btn btn-royal" type="submit">회원가입</button>
+          <div style="font-size:10px;color:var(--muted)">회사 이메일만 허용하려면 아래 JS의 ALLOWED_EMAIL_DOMAIN을 설정하세요.</div>
+        </form>
+        <div id="authSwitch" class="auth-switch">이미 회원인가요? <button id="authToggle">로그인으로 전환</button></div>
+        <button id="logoutBtn" class="btn btn-soft" style="display:none;width:100%;margin-top:10px">로그아웃</button>
+      </section>
+    </div>
+  </section>
+
+  <footer>HD PROJECT LOUNGE · 홍보실 사내 프로젝트 협업 공간 · Supabase 기반</footer>
+</main>
+
+<div id="modal" class="modal-backdrop">
+  <div class="modal"><div class="modal-head"><div><h3 id="modalTitle">게시물</h3><div id="modalMeta" class="detail-meta"></div></div><button class="icon" onclick="closeModal()">✕</button></div><div id="modalBody" class="detail-body"></div></div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+/* ============================================================
+   1) SUPABASE CONFIG
+   ============================================================ */
+const SUPABASE_URL="https://xzzkwculaueadggkqvop.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_QPWvXaHbLMKwmf_wMRAcgA_b9NiTQFg";
+const {createClient}=window.supabase;
+const sb=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+
+/* 회사 메일 도메인을 제한하려면 "company.co.kr"처럼 입력합니다. */
+const ALLOWED_EMAIL_DOMAIN="";
+
+const BOARD_META={
+  notice:{title:"공지사항",desc:"프로젝트 일정, 결정사항, 운영 안내"},
+  webzine:{title:"자유게시판",desc:"웹진 스타일의 프로젝트 이야기와 아이디어"},
+  archive:{title:"자료실",desc:"프로젝트 기획자료, 문서, 파일 공유"},
+  gallery:{title:"갤러리",desc:"회의와 프로젝트 현장 사진·활동 기록"}
+};
+
+let currentBoard="notice";
+let authMode="signup";
+let currentUser=null;
+let cachedPosts=[];
+
+/* ============================================================
+   2) BASIC UTILITY
+   ============================================================ */
+const $=id=>document.getElementById(id);
+function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2200)}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function fmtDate(v){if(!v)return"-";const d=new Date(v);return Number.isNaN(d.getTime())?v:d.toLocaleDateString("ko-KR")}
+function scrollToId(id){$(id)?.scrollIntoView({behavior:"smooth",block:"start"})}
+
+/* ============================================================
+   3) MOVING HERO BACKGROUND
+   ============================================================ */
+function initHeroMotion(){
+  const c=$("heroCanvas"),ctx=c.getContext("2d");let ps=[],w=0,h=0;
+  function resize(){
+    const dpr=Math.min(devicePixelRatio||1,2);w=c.clientWidth;h=c.clientHeight;c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    ps=Array.from({length:55},()=>({x:Math.random()*w,y:Math.random()*h,r:.5+Math.random()*1.7,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.2,a:.15+Math.random()*.5}));
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<-10)p.x=w+10;if(p.x>w+10)p.x=-10;if(p.y<-10)p.y=h+10;if(p.y>h+10)p.y=-10;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(69,214,178,${p.a})`;ctx.fill()});
+    for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){const a=ps[i],b=ps[j],dx=a.x-b.x,dy=a.y-b.y,dist=Math.hypot(dx,dy);if(dist<125){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(79,123,255,${(1-dist/125)*.18})`;ctx.stroke()}}
+    requestAnimationFrame(draw);
+  }
+  addEventListener("resize",resize);resize();draw();
+}
+
+/* ============================================================
+   4) AUTH
+   ============================================================ */
+function setAuthMode(mode){
+  authMode=mode;
+  $("authTitle").textContent=mode==="signup"?"프로젝트 회원가입":"프로젝트 로그인";
+  $("authDesc").textContent=mode==="signup"?"회사 이메일과 비밀번호만으로 간결하게 시작합니다.":"등록한 계정으로 프로젝트 공간에 접속합니다.";
+  $("authPassword2").style.display=mode==="signup"?"block":"none";
+  $("authPassword2").required=mode==="signup";
+  $("authSubmit").textContent=mode==="signup"?"회원가입":"로그인";
+  $("authToggle").textContent=mode==="signup"?"로그인으로 전환":"회원가입으로 전환";
+}
+function renderAuth(){
+  $("userLabel").textContent=currentUser?.email||"로그인 필요";
+  $("navAuth").textContent=currentUser?"로그아웃":"회원가입";
+  $("navAuth").onclick=()=>currentUser?logout():scrollToId("join");
+  $("authForm").style.display=currentUser?"none":"grid";
+  $("authSwitch").style.display=currentUser?"none":"block";
+  $("logoutBtn").style.display=currentUser?"block":"none";
+}
+async function refreshSession(){const {data,error}=await sb.auth.getSession();if(error)console.warn(error);currentUser=data?.session?.user||null;renderAuth()}
+async function logout(){const {error}=await sb.auth.signOut();if(error)toast(error.message);else toast("로그아웃되었습니다.")}
+$("authToggle").onclick=()=>setAuthMode(authMode==="signup"?"login":"signup");
+$("logoutBtn").onclick=logout;
+
+$("authForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const email=$("authEmail").value.trim(),pw=$("authPassword").value,pw2=$("authPassword2").value;
+  if(ALLOWED_EMAIL_DOMAIN && !email.toLowerCase().endsWith("@"+ALLOWED_EMAIL_DOMAIN.toLowerCase())){toast("허용된 회사 이메일을 사용해주세요.");return}
+  if(authMode==="signup"&&pw!==pw2){toast("비밀번호가 서로 다릅니다.");return}
+  $("authSubmit").disabled=true;
+  try{
+    if(authMode==="signup"){
+      const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{display_name:email.split("@")[0]}}});
+      if(error)throw error;
+      toast(data.session?"회원가입이 완료되었습니다.":"가입 완료. 이메일 인증을 확인해주세요.");
+    }else{
+      const {error}=await sb.auth.signInWithPassword({email,password:pw});
+      if(error)throw error;
+      toast("로그인되었습니다.");
+    }
+  }catch(err){console.error(err);toast(err.message||"인증 오류")}
+  finally{$("authSubmit").disabled=false}
+});
+sb.auth.onAuthStateChange((_e,session)=>{currentUser=session?.user||null;renderAuth()});
+
+/* ============================================================
+   5) BOARD
+   ============================================================ */
+function openBoard(type){
+  currentBoard=type;
+  $("boardTitle").textContent=BOARD_META[type].title;
+  $("boardDesc").textContent=BOARD_META[type].desc;
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.board===type));
+  document.querySelectorAll(".nav-link").forEach(b=>b.classList.toggle("active",b.dataset.board===type));
+  scrollToId("boardSection");
+  loadBoard(type);
+}
+async function loadBoard(type=currentBoard){
+  currentBoard=type; $("postList").innerHTML='<div class="loading">게시물을 불러오는 중...</div>';
+  const {data,error}=await sb.from("project_posts").select("id,title,content,board_type,author_name,created_at,thumbnail_url,file_url,file_name").eq("board_type",type).order("created_at",{ascending:false}).limit(20);
+  if(error){console.warn(error);$("postList").innerHTML='<div class="empty">Supabase DB/RLS 설정을 확인해주세요.</div>';return}
+  cachedPosts=data||[];
+  renderPosts(cachedPosts); loadCounts();
+}
+function renderPosts(posts){
+  if(!posts.length){$("postList").innerHTML='<div class="empty">아직 등록된 게시물이 없습니다.</div>';return}
+  $("postList").innerHTML=posts.map(p=>`<button class="post" onclick="openPost('${esc(p.id)}')"><div class="post-type">${esc(BOARD_META[p.board_type]?.title||"POST")}</div><div><div class="post-title">${esc(p.title)}</div><div class="post-meta">${esc(p.author_name||"프로젝트 운영팀")}</div></div><div class="post-date">${fmtDate(p.created_at)}</div></button>`).join("");
+}
+async function loadCounts(){
+  const types=["notice","webzine","archive","gallery"];
+  const rs=await Promise.all(types.map(async t=>{const {count,error}=await sb.from("project_posts").select("id",{count:"exact",head:true}).eq("board_type",t);return {t,count:error?0:(count||0)}}));
+  const ids={notice:"countNotice",webzine:"countWebzine",archive:"countArchive",gallery:"countGallery"};
+  rs.forEach(x=>{ if(ids[x.t]) $(ids[x.t]).textContent=x.count; });
+  $("metricPosts").textContent=rs.reduce((a,b)=>a+b.count,0);
+}
+async function loadMembers(){const {count,error}=await sb.from("profiles").select("id",{count:"exact",head:true});$("metricMembers").textContent=error?0:(count||0)}
+function openPost(id){const p=cachedPosts.find(x=>x.id===id);if(!p)return;$("modalTitle").textContent=p.title;$("modalMeta").textContent=`${BOARD_META[p.board_type]?.title||"게시물"} · ${p.author_name||"프로젝트 운영팀"} · ${fmtDate(p.created_at)}`;$("modalBody").textContent=p.content||"내용이 없습니다.";$("modal").classList.add("show")}
+function closeModal(){$("modal").classList.remove("show")}
+$("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
+
+/* ============================================================
+   6) GALLERY PREVIEW
+   ============================================================ */
+async function loadGallery(){
+  const {data,error}=await sb.from("project_posts").select("id,title,created_at,thumbnail_url").eq("board_type","gallery").order("created_at",{ascending:false}).limit(4);
+  if(error||!data?.length){
+    $("galleryGrid").innerHTML=Array.from({length:4},(_,i)=>`<article class="gallery-card"><div class="gcontent"><small>PROJECT GALLERY ${String(i+1).padStart(2,"0")}</small><strong>프로젝트 활동 이미지 준비중</strong></div></article>`).join("");return
+  }
+  $("galleryGrid").innerHTML=data.map(p=>`<article class="gallery-card" ${p.thumbnail_url?`style="background-image:linear-gradient(rgba(8,26,51,.3),rgba(8,26,51,.88)),url('${esc(p.thumbnail_url)}')"`:""}><div class="gcontent"><small>${fmtDate(p.created_at)}</small><strong>${esc(p.title)}</strong></div></article>`).join("");
+}
+
+/* ============================================================
+   7) NAVIGATION EVENTS
+   ============================================================ */
+document.querySelectorAll("[data-board]").forEach(b=>b.addEventListener("click",()=>openBoard(b.dataset.board)));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>scrollToId(b.dataset.go)));
+document.querySelectorAll(".nav-link").forEach(b=>b.addEventListener("click",()=>b.dataset.go?scrollToId(b.dataset.go):openBoard(b.dataset.board)));
+
+/* ============================================================
+   8) START
+   ============================================================ */
+document.addEventListener("DOMContentLoaded",async()=>{
+  initHeroMotion();setAuthMode("signup");await refreshSession();await loadBoard("notice");await loadGallery();await loadMembers();
+});
+</script>
+</body>
+</html>
